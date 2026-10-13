@@ -10,36 +10,28 @@ const steps = [
   ["Delivered", "Enjoy"]
 ];
 
-// The tracker is a demo: it moves forward based on how long ago the order was placed.
-// (A real shop would update the status from a kitchen screen.)
-function stepFor(createdAt, now) {
-  const seconds = (now - new Date(createdAt)) / 1000;
-  if (seconds < 15) return 0;
-  if (seconds < 40) return 1;
-  if (seconds < 70) return 2;
-  return 3;
-}
+// Which step of the tracker each status from the database lights up
+const stepOf = { received: 0, baking: 1, ready: 1, "on-the-way": 2, delivered: 3 };
 
 export default function Order() {
   const { code } = useParams();
   const [order, setOrder] = useState(null);
   const [error, setError] = useState("");
-  const [now, setNow] = useState(Date.now());
 
+  // Load the order, then check again every 5 seconds so the tracker follows what staff do on the POS
   useEffect(() => {
-    fetch("/api/orders/" + code)
-      .then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        setOrder(data);
-      })
-      .catch((err) => setError(err.message || "Could not load your order."));
-  }, [code]);
-
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 3000);
+    const load = () =>
+      fetch("/api/orders/" + code)
+        .then(async (res) => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+          setOrder(data);
+        })
+        .catch((err) => setError(err.message || "Could not load your order."));
+    load();
+    const timer = setInterval(load, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [code]);
 
   if (error) {
     return (
@@ -52,7 +44,8 @@ export default function Order() {
   }
   if (!order) return <main className="page page-center"><p className="muted">Loading your order…</p></main>;
 
-  const step = stepFor(order.createdAt, now);
+  const cancelled = order.status === "cancelled";
+  const step = stepOf[order.status] ?? 0;
 
   return (
     <main className="page page-center order-page">
@@ -69,11 +62,13 @@ export default function Order() {
       <p className="order-code">{order.code}</p>
       <p className="muted">Thanks, {order.customer.name.split(" ")[0]}. We're on it.</p>
 
+      {cancelled && <p className="form-error">This order was cancelled. Please call us if that's a mistake.</p>}
+
       <ol className="tracker">
         {steps.map(([title, hint], i) => (
-          <li key={title} className={i <= step ? "done" : ""}>
+          <li key={title} className={!cancelled && i <= step ? "done" : ""}>
             <span className="dot">
-              {i === step && <motion.i animate={{ scale: [1, 2.2], opacity: [0.6, 0] }} transition={{ repeat: Infinity, duration: 1.8 }} />}
+              {i === step && !cancelled && <motion.i animate={{ scale: [1, 2.2], opacity: [0.6, 0] }} transition={{ repeat: Infinity, duration: 1.8 }} />}
             </span>
             <strong>{title}</strong>
             <small>{hint}</small>

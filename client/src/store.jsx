@@ -19,7 +19,7 @@ export function MenuProvider({ children }) {
   const [menu, setMenu] = useState({ products: [], sizes: {}, freeDeliveryOver: 3000, deliveryFee: 150 });
   const [status, setStatus] = useState("loading"); // loading | ready | error
 
-  useEffect(() => {
+  const reload = () =>
     fetch("/api/menu")
       .then((res) => {
         if (!res.ok) throw new Error("Menu request failed");
@@ -30,9 +30,12 @@ export function MenuProvider({ children }) {
         setStatus("ready");
       })
       .catch(() => setStatus("error"));
+
+  useEffect(() => {
+    reload();
   }, []);
 
-  return <MenuContext.Provider value={{ ...menu, status }}>{children}</MenuContext.Provider>;
+  return <MenuContext.Provider value={{ ...menu, status, reload }}>{children}</MenuContext.Provider>;
 }
 
 export function CartProvider({ children }) {

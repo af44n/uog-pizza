@@ -56,8 +56,12 @@ function ProductCard({ product, index }) {
 
       <div className="card-buy">
         <strong className="price">{money(price)}</strong>
-        <button className="btn btn-small btn-primary" onClick={() => add(product, product.sized ? size : "Regular")}>
-          Add
+        <button
+          className="btn btn-small btn-primary"
+          disabled={!product.available}
+          onClick={() => add(product, product.sized ? size : "Regular")}
+        >
+          {product.available ? "Add" : "Sold out"}
         </button>
       </div>
     </motion.article>

@@ -7,6 +7,7 @@ import CartDrawer from "./components/CartDrawer.jsx";
 import Home from "./pages/Home.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Order from "./pages/Order.jsx";
+import PosApp from "./pos/PosApp.jsx";
 
 // The opening animation: the name rises, then the curtain lifts
 function Intro({ onDone }) {
@@ -43,11 +44,13 @@ function Intro({ onDone }) {
 
 export default function App() {
   // ?nointro in the address skips the opening animation (handy while developing)
-  const [showIntro, setShowIntro] = useState(!window.location.search.includes("nointro"));
   const location = useLocation();
+  const isPos = location.pathname.startsWith("/pos"); // the staff till has no intro, nav or smooth scrolling
+  const [showIntro, setShowIntro] = useState(!isPos && !window.location.search.includes("nointro"));
 
   // Smooth, slow scrolling for the whole site
   useEffect(() => {
+    if (isPos) return;
     const lenis = new Lenis({ lerp: 0.08, wheelMultiplier: 0.9 });
     window.__lenis = lenis;
     let frame;
@@ -59,8 +62,9 @@ export default function App() {
     return () => {
       cancelAnimationFrame(frame);
       lenis.destroy();
+      window.__lenis = null;
     };
-  }, []);
+  }, [isPos]);
 
   // Start at the top whenever the page changes
   useEffect(() => {
@@ -76,9 +80,10 @@ export default function App() {
   return (
     <>
       <AnimatePresence>{showIntro && <Intro onDone={() => setShowIntro(false)} />}</AnimatePresence>
-      <Nav />
-      <CartDrawer />
+      {!isPos && <Nav />}
+      {!isPos && <CartDrawer />}
       <Routes>
+        <Route path="/pos" element={<PosApp />} />
         <Route path="/" element={<Home ready={!showIntro} />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order/:code" element={<Order />} />

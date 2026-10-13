@@ -20,9 +20,11 @@ app.use("/api", async (req, res, next) => {
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 app.use("/api/menu", require("./routes/menu"));
 app.use("/api/orders", require("./routes/orders"));
+app.use("/api/staff", require("./routes/staff"));
 
 // Any error ends up here
 app.use((err, req, res, next) => {
+  if (err.status) return res.status(err.status).json({ error: err.message }); // errors we threw on purpose (HttpError)
   console.error(err);
   res.status(500).json({ error: "Something went wrong on our side. Please try again." });
 });

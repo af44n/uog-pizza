@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema({
   sized: { type: Boolean, default: false },        // true for pizzas
   art: { type: String, required: true },           // which SVG illustration the website draws
   tags: [String],                                  // e.g. "Spicy", "Veg", "Bestseller"
+  available: { type: Boolean, default: true },     // staff can switch an item off when it sells out
   order: { type: Number, default: 0 }              // display order
 });
 

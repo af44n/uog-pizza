@@ -3,11 +3,18 @@
 A pizza ordering website built with the **MERN stack**: MongoDB, Express, React and Node.js.
 
 ## What it does
+**Website (customers):**
 - Landing page with animated hero, scrolling menu strip, story section and visit info
 - Menu loaded from MongoDB, filtered by category, with pizza sizes
 - Cart (saved in the browser), free-delivery progress bar
 - Checkout form with validation, order saved to MongoDB
-- Order confirmation page with an order code and a progress tracker
+- Order confirmation page with an order code and a live progress tracker
+
+**POS (staff) at `/pos`, protected by a PIN:**
+- Counter screen for walk-in sales: sizes, dine-in/takeaway, cash (with change) or card, printable receipt
+- Orders queue: website and counter orders, staff move them New → Baking → Ready → Delivered (the customer's tracker follows)
+- Today's sales: revenue, orders, average, cash vs card, counter vs website, best sellers
+- Menu availability: mark an item sold out (blocked on the website and the counter)
 
 ## Project structure
 ```
@@ -32,11 +39,12 @@ uog-pizza/
 |--------|---------------------|--------------------------------------|
 | GET    | `/api/menu`         | All menu items and pricing rules     |
 | POST   | `/api/orders`       | Place an order                       |
+| *      | `/api/staff/*`      | POS: login, orders, summary, menu (needs `x-staff-pin` header) |
 | GET    | `/api/orders/:code` | Look up an order by its code         |
 
 ## Run it locally
 1. Start MongoDB: `docker run -d -p 27017:27017 --name uog-mongo mongo:7`
-2. Copy `.env.example` to `.env`
+2. Copy `.env.example` to `.env` (the POS PIN defaults to `1234` locally)
 3. `npm run install:all`
 4. `npm run seed` (loads the menu into the database)
 5. `npm run dev` then open http://localhost:5173
@@ -45,6 +53,6 @@ Add `?nointro` to the address to skip the opening animation.
 
 ## Deploy to Vercel
 1. Create a free MongoDB Atlas cluster and copy its connection string.
-2. `vercel` to link the project, then add `MONGODB_URI` as an environment variable.
+2. `vercel` to link the project, then add `MONGODB_URI` and `POS_PIN` (the staff PIN) as environment variables.
 3. Run `npm run seed` once with `MONGODB_URI` pointing at Atlas.
 4. `vercel --prod`
