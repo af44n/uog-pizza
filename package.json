@@ -1,0 +1,22 @@
+{
+  "name": "uog-pizza",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UOG Pizza - MERN stack ordering website (MongoDB, Express, React, Node)",
+  "scripts": {
+    "dev": "concurrently -n api,web -c yellow,cyan \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "npm --prefix client run dev",
+    "seed": "node server/seed.js",
+    "install:all": "npm install && npm --prefix client install"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.8.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
