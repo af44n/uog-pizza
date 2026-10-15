@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
   art: { type: String, required: true },           // which SVG illustration the website draws
   tags: [String],                                  // e.g. "Spicy", "Veg", "Bestseller"
   available: { type: Boolean, default: true },     // staff can switch an item off when it sells out
+  stock: { type: Number, default: null },        // units left today; null = not tracked. Reaching 0 marks the item sold out
   order: { type: Number, default: 0 }              // display order
 });
 

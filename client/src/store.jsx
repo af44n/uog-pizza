@@ -1,3 +1,4 @@
+import api from "./api.js";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 /* ------------------------------------------------------------------
@@ -20,13 +21,10 @@ export function MenuProvider({ children }) {
   const [status, setStatus] = useState("loading"); // loading | ready | error
 
   const reload = () =>
-    fetch("/api/menu")
+    api
+      .get("/menu")
       .then((res) => {
-        if (!res.ok) throw new Error("Menu request failed");
-        return res.json();
-      })
-      .then((data) => {
-        setMenu(data);
+        setMenu(res.data);
         setStatus("ready");
       })
       .catch(() => setStatus("error"));

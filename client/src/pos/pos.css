@@ -110,3 +110,51 @@
   #print-area { position: absolute; left: 0; top: 0; width: 80mm; }
   .no-print { display: none !important; }
 }
+
+/* ---- added features ---- */
+.pos-count { display: inline-block; min-width: 20px; margin-left: 8px; padding: 0 6px; border-radius: 99px; background: var(--ember); color: #fff; font-family: var(--mono); font-size: 0.75rem; line-height: 20px; }
+.pos-bar nav button.on .pos-count { background: var(--ink); }
+.pos-note { color: var(--flour-dim); font-size: 0.75rem; }
+.pos-note-box { background: rgba(241, 185, 75, 0.12); color: var(--gold); border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; margin: 0; }
+.pos-meta a { color: var(--gold); }
+
+.pos-search { flex: 1; min-width: 160px; width: auto; border-radius: 999px; padding: 9px 16px; }
+.pos-held { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; color: var(--flour-dim); font-size: 0.9rem; }
+.pos-held-ticket { display: inline-flex; border: 1px solid var(--gold); border-radius: 999px; overflow: hidden; }
+.pos-held-ticket button { background: none; color: var(--gold); padding: 6px 12px; font-weight: 600; }
+.pos-held-ticket button + button { border-left: 1px solid var(--gold); padding: 6px 10px; }
+
+.pos-fields { display: grid; gap: 8px; }
+.pos-discount { display: grid; grid-template-columns: auto auto 1fr; gap: 8px; align-items: center; }
+.pos-discount .pos-toggle button { padding: 7px 14px; }
+.pos-sums > div { display: flex; justify-content: space-between; color: var(--flour-dim); font-size: 0.9rem; padding: 2px 0; }
+.pos-actions3 { display: grid; grid-template-columns: auto auto 1fr; gap: 8px; }
+.pos-quick button.on { background: var(--flour); color: var(--ink); }
+
+.pos-filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pos-filters .pos-input { width: auto; min-width: 200px; padding: 9px 14px; }
+.pos-filters .pos-toggle button { padding: 8px 16px; }
+
+.pos-dialog { background: var(--char); color: var(--flour); border: 1px solid var(--line); border-radius: 20px; padding: 24px; width: min(100%, 420px); display: flex; flex-direction: column; gap: 12px; max-height: 92vh; overflow-y: auto; }
+.pos-dialog .pos-quick { margin: 0; }
+.pos-menu-list + h3, section > h3 { margin-top: 18px; }
+.pos-menu-list .pos-order-buttons { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.pos-menu-list .pos-btn { padding: 8px 14px; }
+
+.pos-wide { max-width: 1400px; }
+.pos-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+@media (max-width: 900px) { .pos-board { grid-template-columns: 1fr; } }
+.pos-board section { background: rgba(255, 255, 255, 0.03); border-radius: 18px; padding: 14px; display: grid; gap: 10px; }
+.pos-board h3 { margin: 0; }
+.pos-ticket-card { background: var(--char); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 8px; }
+.pos-ticket-card header { display: flex; justify-content: space-between; align-items: center; }
+.pos-ticket-card header strong { font-family: var(--mono); font-size: 1.1rem; }
+.pos-ticket-card ul { list-style: none; margin: 0; padding: 0; font-size: 1.15rem; display: grid; gap: 2px; }
+.pos-ticket-card.s-received { border-color: var(--ember); }
+
+.pos-stats { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.pos-stats b { font-size: 1.8rem; }
+.pos-columns { display: flex; align-items: flex-end; gap: 6px; height: 170px; padding-top: 8px; }
+.pos-columns > div { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; min-width: 0; gap: 6px; }
+.pos-columns i { display: block; background: var(--ember); border-radius: 6px 6px 0 0; min-height: 2px; }
+.pos-columns span { text-align: center; font-family: var(--mono); font-size: 0.7rem; color: var(--flour-dim); }

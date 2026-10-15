@@ -21,15 +21,18 @@ const orderSchema = new mongoose.Schema(
     source: { type: String, enum: ["online", "counter"], default: "online" },          // where the order came from
     orderType: { type: String, enum: ["delivery", "dine-in", "takeaway"], default: "delivery" },
     payment: { type: String, enum: ["cod", "card", "cash"], default: "cod" },
+    table: { type: String, default: "", trim: true },                                   // dine-in table number
     cashReceived: Number,                                                               // counter cash orders only
     subtotal: Number,
+    discount: { type: { type: String, enum: ["percent", "amount"] }, value: Number, amount: { type: Number, default: 0 } }, // amount = Rs taken off
     deliveryFee: Number,
     total: Number,
     status: {
       type: String,
       enum: ["received", "baking", "ready", "on-the-way", "delivered", "cancelled"],
       default: "received"
-    }
+    },
+    cancelReason: { type: String, default: "" }
   },
   { timestamps: true }
 );

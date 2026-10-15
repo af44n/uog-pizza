@@ -1,3 +1,4 @@
+import api from "../api.js";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "motion/react";
@@ -21,12 +22,9 @@ export default function Order() {
   // Load the order, then check again every 5 seconds so the tracker follows what staff do on the POS
   useEffect(() => {
     const load = () =>
-      fetch("/api/orders/" + code)
-        .then(async (res) => {
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error);
-          setOrder(data);
-        })
+      api
+        .get("/orders/" + code)
+        .then((res) => setOrder(res.data))
         .catch((err) => setError(err.message || "Could not load your order."));
     load();
     const timer = setInterval(load, 5000);

@@ -1,3 +1,4 @@
+import api from "../api.js";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
@@ -25,17 +26,11 @@ export default function Checkout() {
 
     setSending(true);
     try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customer: form,
-          payment,
-          items: items.map((i) => ({ productId: i.productId, size: i.size, qty: i.qty }))
-        })
+      const { data } = await api.post("/orders", {
+        customer: form,
+        payment,
+        items: items.map((i) => ({ productId: i.productId, size: i.size, qty: i.qty }))
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Could not place your order.");
 
       clear();
       navigate("/order/" + data.code);
